@@ -10,7 +10,7 @@ st.set_page_config(
 
 # Title and description
 st.title("🗄️ Snowflake RBAC Database Setup")
-st.markdown("### Complete RBAC Structure: Database, Schema, and Access Roles")
+st.markdown("### Example RBAC Structure: Database, Schema, and Access Roles")
 st.markdown("---")
 
 # Input section
@@ -544,5 +544,5 @@ else:
 
 # Footer
 st.markdown("---")
-st.markdown("*This visualization covers the complete RBAC setup including database roles, schema access roles, and account-level functional roles*")
+st.markdown("*This visualization covers an example RBAC setup including database roles, schema access roles, and account-level functional roles*")
 
