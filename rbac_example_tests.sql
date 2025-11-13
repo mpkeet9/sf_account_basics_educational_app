@@ -1,0 +1,66 @@
+-- =====================================
+-- Testing Read Only Role (Analyst)
+-- =====================================
+
+USE ROLE DB_ANALYTICS_ANALYST;
+USE SECONDARY ROLES NONE;
+USE WAREHOUSE SIMPLE_COMPUTE;
+
+-- Read is successful
+SELECT * FROM DB_ANALYTICS.OPERATIONS.INVENTORY_LEVELS LIMIT 3;
+
+-- Cannot create a table
+CREATE OR REPLACE TABLE DB_ANALYTICS.OPERATIONS.ENGAGEMENT_LEVELS (
+    ENGAGEMENT_ID INT PRIMARY KEY,
+    ENGAGMENT_LEVEL DATE
+) COMMENT = 'Inventory levels by warehouse and product';
+
+SELECT CURRENT_SECONDARY_ROLES();
+
+-- Cannot insert to existing table
+INSERT INTO DB_ANALYTICS.OPERATIONS.INVENTORY_LEVELS (INVENTORY_ID, WAREHOUSE_ID, PRODUCT_ID, QUANTITY_ON_HAND, QUANTITY_RESERVED, REORDER_POINT, LAST_RESTOCK_DATE, NEXT_REORDER_DATE)
+VALUES
+    (701, 501, 101, 75, 10, 20, '2023-06-01', '2023-07-15');
+
+
+
+-- =====================================
+-- Testing create Role (support)
+-- =====================================
+USE ROLE DB_ANALYTICS_SUPPORT;
+USE SECONDARY ROLES NONE;
+USE WAREHOUSE SIMPLE_COMPUTE;
+
+-- Read is successful
+SELECT * FROM DB_ANALYTICS.OPERATIONS.INVENTORY_LEVELS LIMIT 3;
+
+-- Cannot create a table
+CREATE OR REPLACE TABLE DB_ANALYTICS.OPERATIONS.ENGAGEMENT_LEVELS (
+    ENGAGEMENT_ID INT PRIMARY KEY,
+    ENGAGEMENT_LEVEL INT
+) COMMENT = 'Inventory levels by warehouse and product';
+
+INSERT INTO DB_ANALYTICS.OPERATIONS.ENGAGEMENT_LEVELS (ENGAGEMENT_ID, ENGAGEMENT_LEVEL)
+    VALUES
+        (1,1);
+
+SELECT * FROM DB_ANALYTICS.OPERATIONS.ENGAGEMENT_LEVELS;
+
+-- Cannot modify the existing schema
+ALTER SCHEMA DB_ANALYTICS.OPERATIONS SET COMMENT = 'test?';
+
+-- Cannot create outside of this schema
+CREATE SCHEMA DB_ANALYTICS.SANDBOX;
+
+
+
+-- =====================================
+-- Testing write Role (Developer)
+-- =====================================
+USE ROLE DB_ANALYTICS_DEVELOPER;
+USE SECONDARY ROLES NONE;
+USE WAREHOUSE SIMPLE_COMPUTE;
+
+
+-- Can alter schema in place 
+ALTER SCHEMA DB_ANALYTICS.OPERATIONS SET COMMENT = 'SANDBOX';
