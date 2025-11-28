@@ -1,0 +1,8 @@
+name: sf_account_basics_educational_app
+channels:
+  - defaults
+dependencies:
+  - streamlit>=1.28.0
+  - python-graphviz>=0.20.1
+  - snowflake-snowpark-python
+  - pandas>=2.0.0
